@@ -40,14 +40,17 @@ def monkey_patch(remembered_str):
         Tells if the remembered_str is different than the current one
         """
         return str(self) != remembered_str
-    remembered_str.has_changed = types.MethodType(has_changed, remembered_str)
 
     def same_length(self):  # Uses the local method of length to compare
         """
         Is actual length the same as the remembered_str's?
         """
         return length_was() == len(str(self))
+
+    # Now we add the functions we'd like tu have in the object
+    remembered_str.has_changed = types.MethodType(has_changed, remembered_str)
     remembered_str.same_length = types.MethodType(same_length, remembered_str)
+
 
 def check(my_string):
     """
@@ -82,12 +85,10 @@ def main():
     monkey_patch(my_string)  # Properties of my_string will be remembered at
                              # this point
     check(my_string)
-    my_string.current_str = 'good bye'
-    check(my_string)
-    my_string.current_str = 'hello'
-    check(my_string)
-    my_string.current_str = 'Hello'
-    check(my_string)
+
+    for i in 'good bye', 'hello', 'Hello':
+        my_string.current_str = i
+        check(my_string)
 
 if __name__ == '__main__':
     main()
